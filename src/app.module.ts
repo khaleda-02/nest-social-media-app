@@ -6,10 +6,11 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({isGlobal:true ,load:config}) ,
-  DatabaseModule,
-  AuthModule,
-  UserModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true, load: config }),
+    DatabaseModule,
+    AuthModule,
+    UserModule,
+  ],
 })
-
 export class AppModule {}

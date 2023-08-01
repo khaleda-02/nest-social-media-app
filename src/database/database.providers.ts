@@ -1,6 +1,7 @@
-import { SEQUELIZE } from "../common/contants";
-import { ConfigService } from "@nestjs/config";
+import { SEQUELIZE } from '../common/contants';
+import { ConfigService } from '@nestjs/config';
 import { Sequelize } from 'sequelize-typescript';
+import { User } from '../user/entities/user.entity';
 
 export const databaseProviders = [
   {
@@ -8,10 +9,10 @@ export const databaseProviders = [
     useFactory: async (configService: ConfigService) => {
       const config = configService.get('database');
       const sequelize = new Sequelize(config);
-      sequelize.addModels([]);
+      sequelize.addModels([User]);
       return sequelize;
     },
-    
+
     inject: [ConfigService],
   },
 ];
