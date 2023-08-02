@@ -5,14 +5,17 @@ import {
   PrimaryKey,
   Table,
   Unique,
-  Model
+  Model,
+  AutoIncrement,
 } from 'sequelize-typescript';
+import { Post } from '../../post/entities/post.entity';
 
 const { DATE, NUMBER, STRING } = DataType;
 
 @Table({ underscored: true, paranoid: true, tableName: 'Users' })
 export class User extends Model<User> {
   @PrimaryKey
+  @AutoIncrement
   @Column(NUMBER)
   id: number;
 
@@ -26,8 +29,11 @@ export class User extends Model<User> {
   @Column(STRING)
   password: string;
 
-  // @HasMany()
-  // todos : Todo[];
+  @Column({ type: NUMBER, defaultValue: 0 })
+  postsCreatedToday: number;
+
+  @HasMany(() => Post)
+  posts: Post[];
 
   @Column(DATE)
   createdAt: Date;
