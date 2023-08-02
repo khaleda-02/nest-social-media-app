@@ -35,15 +35,47 @@ export class PostService {
     return post;
   }
 
-  findAll(userId: number) {
-    return `This action returns all post`;
+  async findAll(userId: number) {
+    const lastestPosts = await this.postRepository.findAll({
+      limit: 500,
+      order: [['createdAt', 'DESC']],
+      raw: true,
+    });
+    const shuffledArray = this.shuffleArray(lastestPosts);
+    return shuffledArray.slice(0, 100);
   }
 
   update(id: number, updatePostDto: UpdatePostDto, userId: number) {
+    const updatedPost = this.postRepository.update(
+      { ...updatePostDto },
+      { where: { userId }, returning: true }
+    );
+    console.log('updatedPost', updatedPost);
+
     return `This action updates a #${id} post`;
   }
 
-  remove(id: number, userId: number) {
-    return `This action removes a #${id} post`;
+  async remove(id: number, userId: number) {
+    const effectedRow = await this.postRepository.destroy({
+      where: { id, userId, numOfWatchers: 0 },
+    });
+    if (!effectedRow)
+      throw new BadRequestException(
+        "not found post , or this post not belong to this user , or can't be deleted"
+      );
+    return `succeflly deleted`;
+  }
+
+  //! Helper Methods
+  private shuffleArray<T>(array: T[]): T[] {
+    const shuffledArray = [...array];
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledArray[i], shuffledArray[j]] = [
+        shuffledArray[j],
+        shuffledArray[i],
+      ];
+    }
+    return shuffledArray;
   }
 }

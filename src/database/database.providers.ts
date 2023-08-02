@@ -9,7 +9,7 @@ export const databaseProviders = [
     provide: SEQUELIZE,
     useFactory: async (configService: ConfigService) => {
       const config = configService.get('database');
-      const sequelize = new Sequelize({ ...config, autoload: true });
+      const sequelize = new Sequelize(config);
       sequelize.addModels([User, Post]);
       return sequelize;
     },

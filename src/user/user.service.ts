@@ -2,21 +2,23 @@ import {
   BadRequestException,
   Inject,
   Injectable,
-  NotFoundException,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { USER_REPOSITORY } from '../common/contants';
 import { User } from './entities/user.entity';
-import { Sequelize } from 'sequelize-typescript';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger();
   constructor(
     @Inject(USER_REPOSITORY)
     private userRepository: typeof User
   ) {}
 
+  //! Base Methods
   async create({ username, password, email }: CreateUserDto): Promise<User> {
     const user = await this.userRepository.findOne({ where: { username } });
     if (user) throw new BadRequestException('User already exists');
@@ -35,8 +37,9 @@ export class UserService {
     return user.get({ plain: true });
   }
 
-  canCreate(user: User): boolean {
-    if (user.postsCreatedToday == 5) return false;
+  //! Hleper Methods
+  canCreate({ postsCreatedToday }: User): boolean {
+    if (postsCreatedToday == 5) return false;
     return true;
   }
 
@@ -44,5 +47,14 @@ export class UserService {
     const user = await this.userRepository.findOne({ where: { username } });
     user.postsCreatedToday++;
     return await user.save();
+  }
+
+  //! Scheduled Tasks
+  @Cron('0 0 * * *')
+  // @Cron(CronExpression.EVERY_5_SECONDS)
+  async resetPostCreated() {
+    this.logger.log('Starting Resetting the postCreatedToday');
+    await this.userRepository.update({ postsCreatedToday: 0 }, { where: {} });
+    this.logger.log('Finish Resetting the postCreatedToday');
   }
 }
