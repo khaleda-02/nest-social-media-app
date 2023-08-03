@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { POST_REPOSITORY } from '../common/contants';
@@ -45,25 +50,35 @@ export class PostService {
     return shuffledArray.slice(0, 100);
   }
 
-  update(id: number, updatePostDto: UpdatePostDto, userId: number) {
-    const updatedPost = this.postRepository.update(
-      { ...updatePostDto },
-      { where: { userId }, returning: true }
-    );
-    console.log('updatedPost', updatedPost);
+  async findOne(id: number): Promise<Post | undefined> {
+    const post = await this.postRepository.findByPk(id);
+    // ? implement the exception here or in post serevice
+    // if (!post) throw new NotFoundException('post not found');
+    return post ? post.get({ plain: true }) : undefined;
+  }
 
-    return `This action updates a #${id} post`;
+  async update(id: number, updatePostDto: UpdatePostDto, userId: number) {
+    const [_, effectedRows] = await this.postRepository.update(
+      { ...updatePostDto, isEdited: true },
+      { where: { userId, id }, returning: true }
+    );
+
+    if (!effectedRows)
+      throw new BadRequestException(
+        'not found post , or this post not belong to this user '
+      );
+    return `succeflly updated ${id} post`;
   }
 
   async remove(id: number, userId: number) {
-    const effectedRow = await this.postRepository.destroy({
+    const effectedRows = await this.postRepository.destroy({
       where: { id, userId, numOfWatchers: 0 },
     });
-    if (!effectedRow)
+    if (!effectedRows)
       throw new BadRequestException(
         "not found post , or this post not belong to this user , or can't be deleted"
       );
-    return `succeflly deleted`;
+    return `succeflly deleted ${id} post`;
   }
 
   //! Helper Methods

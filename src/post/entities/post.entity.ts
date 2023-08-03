@@ -7,8 +7,10 @@ import {
   Model,
   BelongsTo,
   ForeignKey,
+  HasMany,
 } from 'sequelize-typescript';
 import { User } from '../../user/entities/user.entity';
+import { Comment } from '../../comment/entities/comment.entity';
 
 const { STRING, NUMBER, DATE, BOOLEAN } = DataType;
 @Table({ tableName: 'Posts', paranoid: true, underscored: true })
@@ -33,6 +35,9 @@ export class Post extends Model<Post> {
 
   @BelongsTo(() => User)
   user: User;
+
+  @HasMany(() => Comment)
+  comment: Comment[];
 
   @Column(DATE)
   createdAt: Date;
