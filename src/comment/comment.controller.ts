@@ -13,6 +13,7 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { User } from 'src/common/decorators/user.decorator';
 import { User as userType } from 'src/user/entities/user.entity';
+import { ReplyService } from '../reply/reply.service';
 
 @Controller('comments')
 export class CommentController {
@@ -25,25 +26,5 @@ export class CommentController {
     @User() user: userType
   ) {
     return this.commentService.create(createCommentDto, postId, user.id);
-  }
-
-  @Get()
-  findAll() {
-    return this.commentService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.commentService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentService.update(+id, updateCommentDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentService.remove(+id);
   }
 }

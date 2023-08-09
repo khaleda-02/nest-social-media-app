@@ -1,34 +1,38 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ReplyService } from './reply.service';
+import { Body, Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { CreateReplyDto } from './dto/create-reply.dto';
-import { UpdateReplyDto } from './dto/update-reply.dto';
+import { ReplyService } from './reply.service';
+import { User } from '../common/decorators/user.decorator';
+import { ParentType } from '../common/enums/reply-parent.enum';
 
-@Controller('reply')
+@Controller('replies')
 export class ReplyController {
   constructor(private readonly replyService: ReplyService) {}
 
-  @Post()
-  create(@Body() createReplyDto: CreateReplyDto) {
-    return this.replyService.create(createReplyDto);
+  @Post('comments/:commentId')
+  createReplyToComment(
+    @Body() createReplyDto: CreateReplyDto,
+    @Param('commentId', ParseIntPipe) commentId: number,
+    @User() user
+  ) {
+    return this.replyService.create(
+      createReplyDto,
+      user.id,
+      commentId,
+      ParentType.COMMENT
+    );
   }
 
-  @Get()
-  findAll() {
-    return this.replyService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.replyService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReplyDto: UpdateReplyDto) {
-    return this.replyService.update(+id, updateReplyDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.replyService.remove(+id);
+  @Post('/:replyId')
+  createReplyToReply(
+    @Body() createReplyDto: CreateReplyDto,
+    @Param('replyId', ParseIntPipe) replyId: number,
+    @User() user
+  ) {
+    return this.replyService.create(
+      createReplyDto,
+      user.id,
+      replyId,  
+      ParentType.REPLY
+    );
   }
 }

@@ -10,6 +10,7 @@ import { POST_REPOSITORY } from '../common/contants';
 import { Post } from './entities/post.entity';
 import { User } from '../user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
+import { Transaction } from 'sequelize';
 
 @Injectable()
 export class PostService {
@@ -52,15 +53,20 @@ export class PostService {
 
   async findOne(id: number): Promise<Post | undefined> {
     const post = await this.postRepository.findByPk(id);
-    // ? implement the exception here or in post serevice
+    // ? implement the exception here or in comment serevice
     // if (!post) throw new NotFoundException('post not found');
     return post ? post.get({ plain: true }) : undefined;
   }
 
-  async update(id: number, updatePostDto: UpdatePostDto, userId: number) {
+  async update(
+    id: number,
+    updatePostDto: UpdatePostDto,
+    userId: number,
+    transaction: Transaction
+  ) {
     const [_, effectedRows] = await this.postRepository.update(
       { ...updatePostDto, isEdited: true },
-      { where: { userId, id }, returning: true }
+      { where: { userId, id }, returning: true, transaction }
     );
 
     if (!effectedRows)
@@ -92,5 +98,14 @@ export class PostService {
       ];
     }
     return shuffledArray;
+  }
+
+  async incrementNumOfWatchers(postId: number): Promise<Post | undefined> {
+    const post = await this.postRepository.findByPk(postId);
+    if (!post) return undefined;
+
+    post.numOfWatchers += 1;
+    await post.save();
+    return post;
   }
 }

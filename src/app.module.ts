@@ -8,6 +8,7 @@ import { PostModule } from './post/post.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CommentModule } from './comment/comment.module';
 import { ReplyModule } from './reply/reply.module';
+import { AppGateway } from './app.gateway';
 
 @Module({
   imports: [
@@ -20,5 +21,6 @@ import { ReplyModule } from './reply/reply.module';
     CommentModule,
     ReplyModule,
   ],
+  providers: [AppGateway],
 })
 export class AppModule {}

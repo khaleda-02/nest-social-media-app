@@ -7,11 +7,15 @@ import {
   Param,
   Delete,
   Put,
+  UseInterceptors,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { User } from '../common/decorators/user.decorator';
+import { TransactionInterceptor } from 'src/common/interceptors/transaction.interceptor';
+import { TransactionDecorator } from 'src/common/decorators/transaction.decorator';
+import { Transaction } from 'sequelize';
 
 @Controller('posts')
 export class PostController {
@@ -27,13 +31,15 @@ export class PostController {
     return this.postService.findAll(user.id);
   }
 
+  @UseInterceptors(TransactionInterceptor)
   @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updatePostDto: UpdatePostDto,
-    @User() user
+    @User() user,
+    @TransactionDecorator() transaction : Transaction
   ) {
-    return this.postService.update(+id, updatePostDto, user.id);
+    return this.postService.update(+id, updatePostDto, user.id, transaction);
   }
 
   @Delete(':id')

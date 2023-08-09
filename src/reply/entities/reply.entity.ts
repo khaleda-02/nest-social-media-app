@@ -10,32 +10,32 @@ import {
 } from 'sequelize-typescript';
 import { User } from '../../user/entities/user.entity';
 import { Post } from '../../post/entities/post.entity';
+import { ParentType } from '../../common/enums/reply-parent.enum';
 
-const { STRING, NUMBER, DATE } = DataTypes;
+const { STRING, NUMBER, DATE, ENUM } = DataTypes;
 
-@Table({ tableName: 'Comments', paranoid: true, underscored: true })
+@Table({ tableName: 'Replies', paranoid: true, underscored: true })
 export class Reply extends Model {
   @PrimaryKey
   @AutoIncrement
-  @Column
+  @Column(NUMBER)
   id: number;
 
-  @Column
+  @Column(STRING)
   content: string;
 
+  @Column(NUMBER)
+  parentId: number;
+
+  @Column(ENUM(ParentType.COMMENT, ParentType.REPLY))
+  parentType: string;
+
   @ForeignKey(() => User)
-  @Column
+  @Column(NUMBER)
   userId: number;
 
   @BelongsTo(() => User)
   user: User;
-
-  @ForeignKey(() => Post)
-  @Column
-  postId: number;
-
-  @BelongsTo(() => Post)
-  post: Post;
 
   @Column(DATE)
   createdAt: Date;

@@ -20,12 +20,12 @@ export class User extends Model<User> {
   @Column(NUMBER)
   id: number;
 
-  @Column(STRING)
-  email: string;
-
   @Unique
   @Column(STRING)
   username: string;
+
+  @Column(STRING)
+  email: string;
 
   @Column(STRING)
   password: string;

@@ -1,26 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateReplyDto } from './dto/create-reply.dto';
-import { UpdateReplyDto } from './dto/update-reply.dto';
+import { ParentType } from '../common/enums/reply-parent.enum';
+import { REPLY_REPOSITORY } from '../common/contants';
 
 @Injectable()
 export class ReplyService {
-  create(createReplyDto: CreateReplyDto) {
-    return 'This action adds a new reply';
+  constructor(
+    @Inject(REPLY_REPOSITORY)
+    private replyRepository
+  ) {}
+
+  async create(
+    createReplyDto: CreateReplyDto,
+    userId: number,
+    parentId: number,
+    parentType: ParentType
+  ) {
+    return await this.replyRepository.create({
+      ...createReplyDto,
+      userId,
+      parentId,
+      parentType,
+    });
   }
 
-  findAll() {
-    return `This action returns all reply`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} reply`;
-  }
-
-  update(id: number, updateReplyDto: UpdateReplyDto) {
-    return `This action updates a #${id} reply`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} reply`;
-  }
 }

@@ -17,25 +17,25 @@ const { STRING, NUMBER, DATE } = DataTypes;
 export class Comment extends Model {
   @PrimaryKey
   @AutoIncrement
-  @Column
+  @Column(NUMBER)
   id: number;
 
-  @Column
+  @Column(STRING)
   content: string;
 
-  @ForeignKey(() => User)
-  @Column
-  userId: number;
-
-  @BelongsTo(() => User)
-  user: User;
-
   @ForeignKey(() => Post)
-  @Column
+  @Column(NUMBER)
   postId: number;
 
   @BelongsTo(() => Post)
   post: Post;
+
+  @ForeignKey(() => User)
+  @Column(NUMBER)
+  userId: number;
+
+  @BelongsTo(() => User)
+  user: User;
 
   @Column(DATE)
   createdAt: Date;
