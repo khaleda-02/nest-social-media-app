@@ -22,5 +22,6 @@ import { AppGateway } from './app.gateway';
     ReplyModule,
   ],
   providers: [AppGateway],
+  
 })
 export class AppModule {}

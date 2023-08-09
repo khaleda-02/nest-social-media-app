@@ -8,16 +8,14 @@ import {
 } from '@nestjs/common';
 import { Observable, catchError, tap } from 'rxjs';
 import { SEQUELIZE } from '../contants';
-import { Transaction } from 'sequelize';
-import { Sequelize } from 'sequelize-typescript';
+import { Transaction, Sequelize } from 'sequelize';
 
 @Injectable()
 export class TransactionInterceptor implements NestInterceptor {
   private logger = new Logger(TransactionInterceptor.name);
 
   constructor(
-    @Inject(SEQUELIZE)
-    private readonly sequelize: Sequelize
+    @Inject(SEQUELIZE) private sequelize: Sequelize // private sequelize: Sequelize
   ) {}
 
   async intercept(
