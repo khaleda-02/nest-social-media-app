@@ -31,7 +31,7 @@ export class ReplyController {
     return this.replyService.create(
       createReplyDto,
       user.id,
-      replyId,  
+      replyId,
       ParentType.REPLY
     );
   }

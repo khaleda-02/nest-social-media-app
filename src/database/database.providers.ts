@@ -5,6 +5,7 @@ import { User } from '../user/entities/user.entity';
 import { Post } from '../post/entities/post.entity';
 import { Comment } from '../comment/entities/comment.entity';
 import { Reply } from '../reply/entities/reply.entity';
+import { Block } from '../block/entities/block.entity';
 
 export const databaseProviders = [
   {
@@ -12,7 +13,7 @@ export const databaseProviders = [
     useFactory: async (configService: ConfigService) => {
       const config = configService.get('database');
       const sequelize = new Sequelize(config);
-      sequelize.addModels([User, Post, Comment, Reply]);
+      sequelize.addModels([User, Post, Comment, Reply, Block]);
       return sequelize;
     },
 

@@ -9,6 +9,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { CommentModule } from './comment/comment.module';
 import { ReplyModule } from './reply/reply.module';
 import { AppGateway } from './app.gateway';
+import { BlockModule } from './block/block.module';
 
 @Module({
   imports: [
@@ -20,8 +21,8 @@ import { AppGateway } from './app.gateway';
     PostModule,
     CommentModule,
     ReplyModule,
+    BlockModule,
   ],
   providers: [AppGateway],
-  
 })
 export class AppModule {}

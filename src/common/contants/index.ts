@@ -4,6 +4,7 @@ export const TEST = 'test';
 export const PRODUCTION = 'production';
 export const USER_REPOSITORY = 'USER_REPOSITORY';
 export const COMMENT_REPOSITORY = 'COMMENT_REPOSITORY';
+export const BLOCK_REPOSITORY = 'BLOCK_REPOSITORY';
 export const REPLY_REPOSITORY = 'REPLY_REPOSITORY ';
 export const POST_REPOSITORY = 'POST_REPOSITORY';
 export const IS_PUBLIC_KEY = 'isPublic';

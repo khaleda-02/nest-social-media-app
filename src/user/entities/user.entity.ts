@@ -8,6 +8,7 @@ import {
   Model,
   AutoIncrement,
 } from 'sequelize-typescript';
+import { Block } from '../../block/entities/block.entity';
 import { Post } from '../../post/entities/post.entity';
 import { Comment } from '../../comment/entities/comment.entity';
 
@@ -38,6 +39,9 @@ export class User extends Model<User> {
 
   @HasMany(() => Comment)
   comment: Comment[];
+
+  @HasMany(() => Block)
+  blocks: Block[];
 
   @Column(DATE)
   createdAt: Date;
