@@ -18,9 +18,7 @@ export class CommentService {
     postId: number,
     userId: number
   ) {
-    if (!(await this.postService.findOne(postId)))
-      throw new BadRequestException('post not found');
-
+    await this.postService.findOne(postId); // it will return an exception if the post is not found
     const comment = await this.commentRepository.create({
       ...createCommentDto,
       userId,

@@ -3,8 +3,8 @@ import { CommentService } from './comment.service';
 import { CommentController } from './comment.controller';
 import { commentProviders } from './comment.providers';
 import { PostModule } from '../post/post.module';
-import { ReplyModule } from 'src/reply/reply.module';
-import { BlockModule } from 'src/block/block.module';
+import { BlockModule } from '../block/block.module';
+import { ReplyModule } from '../reply/reply.module';
 
 @Module({
   imports: [PostModule, ReplyModule, BlockModule],

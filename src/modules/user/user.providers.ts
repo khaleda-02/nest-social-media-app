@@ -1,4 +1,4 @@
-import { USER_REPOSITORY } from '../common/contants';
+import { USER_REPOSITORY } from 'src/common/contants';
 import { User } from './entities/user.entity';
 
 export const userProviders = [

@@ -1,13 +1,12 @@
 import { CanActivate, ExecutionContext, Inject } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { PostService } from '../../post/post.service';
-import { BlockService } from 'src/block/block.service';
+import { PostService } from 'src/modules/post/post.service';
 
 export class BlockedUserInteractionGuard implements CanActivate {
   constructor(
-    private postService: PostService,
-    // private blockService: BlockService
-  ) {}
+    private postService: PostService
+  ) // private blockService: BlockService
+  {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     console.log('in block guard ');
     console.log(this.postService, 'insdfs');

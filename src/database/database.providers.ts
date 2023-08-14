@@ -1,11 +1,11 @@
 import { SEQUELIZE } from '../common/contants';
 import { ConfigService } from '@nestjs/config';
 import { Sequelize } from 'sequelize-typescript';
-import { User } from '../user/entities/user.entity';
-import { Post } from '../post/entities/post.entity';
-import { Comment } from '../comment/entities/comment.entity';
-import { Reply } from '../reply/entities/reply.entity';
-import { Block } from '../block/entities/block.entity';
+import { Block } from 'src/modules/block/entities/block.entity';
+import { Comment } from 'src/modules/comment/entities/comment.entity';
+import { Post } from 'src/modules/post/entities/post.entity';
+import { Reply } from 'src/modules/reply/entities/reply.entity';
+import { User } from 'src/modules/user/entities/user.entity';
 
 export const databaseProviders = [
   {

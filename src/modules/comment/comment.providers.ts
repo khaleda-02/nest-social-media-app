@@ -1,4 +1,4 @@
-import { COMMENT_REPOSITORY } from '../common/contants';
+import { COMMENT_REPOSITORY } from 'src/common/contants';
 import { Comment } from './entities/comment.entity';
 
 export const commentProviders = [

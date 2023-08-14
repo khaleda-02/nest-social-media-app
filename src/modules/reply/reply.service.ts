@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateReplyDto } from './dto/create-reply.dto';
-import { ParentType } from '../common/enums/reply-parent.enum';
-import { REPLY_REPOSITORY } from '../common/contants';
+import { REPLY_REPOSITORY } from 'src/common/contants';
+import { ParentType } from 'src/common/enums/reply-parent.enum';
 
 @Injectable()
 export class ReplyService {
@@ -23,5 +23,4 @@ export class ReplyService {
       parentType,
     });
   }
-
 }

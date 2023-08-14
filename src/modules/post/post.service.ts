@@ -6,11 +6,11 @@ import {
 } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { POST_REPOSITORY } from '../common/contants';
 import { Post } from './entities/post.entity';
 import { User } from '../user/entities/user.entity';
-import { UserService } from 'src/user/user.service';
 import { Transaction } from 'sequelize';
+import { POST_REPOSITORY } from 'src/common/contants';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class PostService {
@@ -53,9 +53,8 @@ export class PostService {
 
   async findOne(id: number): Promise<Post | undefined> {
     const post = await this.postRepository.findByPk(id);
-    // ? implement the exception here or in comment serevice
-    // if (!post) throw new NotFoundException('post not found');
-    return post ? post.get({ plain: true }) : undefined;
+    if (!post) throw new NotFoundException('post not found');
+    return post;
   }
 
   async update(

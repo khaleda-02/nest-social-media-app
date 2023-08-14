@@ -10,9 +10,9 @@ import {
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { User } from 'src/common/decorators/user.decorator';
-import { User as userType } from 'src/user/entities/user.entity';
 import { BlockedUserInteractionGuard } from 'src/common/guards/blocked-user-interaction.guard';
 import { BlockedUserInteractionInterceptor } from 'src/common/interceptors/blocked-user-interaction.interceptor';
+import { User as userType } from '../user/entities/user.entity';
 
 @Controller('comments')
 export class CommentController {

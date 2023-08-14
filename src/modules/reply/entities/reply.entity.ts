@@ -9,8 +9,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { User } from '../../user/entities/user.entity';
-import { Post } from '../../post/entities/post.entity';
-import { ParentType } from '../../common/enums/reply-parent.enum';
+import { ParentType } from 'src/common/enums/reply-parent.enum';
 
 const { STRING, NUMBER, DATE, ENUM } = DataTypes;
 

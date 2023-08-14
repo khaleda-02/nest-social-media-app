@@ -6,9 +6,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { USER_REPOSITORY } from '../common/contants';
 import { User } from './entities/user.entity';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { USER_REPOSITORY } from 'src/common/contants';
 
 @Injectable()
 export class UserService {

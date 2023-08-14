@@ -12,10 +12,10 @@ import {
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { User } from '../common/decorators/user.decorator';
 import { TransactionInterceptor } from 'src/common/interceptors/transaction.interceptor';
 import { TransactionDecorator } from 'src/common/decorators/transaction.decorator';
 import { Transaction } from 'sequelize';
+import { User } from 'src/common/decorators/user.decorator';
 
 @Controller('posts')
 export class PostController {
@@ -37,7 +37,7 @@ export class PostController {
     @Param('id') id: string,
     @Body() updatePostDto: UpdatePostDto,
     @User() user,
-    @TransactionDecorator() transaction : Transaction
+    @TransactionDecorator() transaction: Transaction
   ) {
     return this.postService.update(+id, updatePostDto, user.id, transaction);
   }

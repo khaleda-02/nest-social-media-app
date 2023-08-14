@@ -8,9 +8,9 @@ import {
 } from '@nestjs/common';
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { ReplyService } from './reply.service';
-import { User } from '../common/decorators/user.decorator';
-import { ParentType } from '../common/enums/reply-parent.enum';
 import { BlockedUserInteractionInterceptor } from 'src/common/interceptors/blocked-user-interaction.interceptor';
+import { User } from 'src/common/decorators/user.decorator';
+import { ParentType } from 'src/common/enums/reply-parent.enum';
 
 @Controller('replies')
 export class ReplyController {
