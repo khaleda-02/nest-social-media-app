@@ -32,8 +32,9 @@ export class BlockedUserInteractionInterceptor implements NestInterceptor {
     const post = await this.postService.findOne(postId);
 
     //todo check of the order of the parameters (blockerId , blockedId)
-    if (!(await this.blockService.isBlockedByUser(post.userId, id)))
-      throw new BadRequestException(`User ${post.userId}`);
+
+    if (await this.blockService.isBlockedByUser(post.userId, id))
+      throw new BadRequestException(`User ${post.userId} blocked you `);
 
     return next.handle().pipe(
       tap(() => {

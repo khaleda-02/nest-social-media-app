@@ -1,9 +1,15 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { BLOCK_REPOSITORY } from 'src/common/contants';
 import { Block } from './entities/block.entity';
 
 @Injectable()
 export class BlockService {
+  private logger = new Logger(BlockService.name);
   constructor(
     @Inject(BLOCK_REPOSITORY)
     private blockRepository: typeof Block
@@ -18,7 +24,7 @@ export class BlockService {
     });
 
     if (blockExists)
-      throw new BadRequestException(`Block ${blockedUserId} already exists`);
+      throw new BadRequestException(`Block ${blockedUserId} already blocked`);
 
     const block = await this.blockRepository.create({
       blockedUserId,
@@ -53,6 +59,12 @@ export class BlockService {
     const blockExists = await this.blockRepository.findOne({
       where: { blockerUserId, blockedUserId },
     });
+
+    this.logger.log(
+      blockExists
+        ? `user with id : ${blockerUserId} , blocking user with id: ${blockedUserId}`
+        : `no blocking relation between users : ${blockerUserId} and ${blockedUserId}`
+    );
     return blockExists ? true : false;
   }
 }
