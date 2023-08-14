@@ -5,9 +5,9 @@ import { BlockService } from 'src/block/block.service';
 
 export class BlockedUserInteractionGuard implements CanActivate {
   constructor(
-    private postService: PostService,
-    // private blockService: BlockService
-  ) {}
+    private postService: PostService
+  ) // private blockService: BlockService
+  {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     console.log('in block guard ');
     console.log(this.postService, 'insdfs');

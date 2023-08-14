@@ -10,6 +10,7 @@ import { CommentModule } from './comment/comment.module';
 import { ReplyModule } from './reply/reply.module';
 import { AppGateway } from './app.gateway';
 import { BlockModule } from './block/block.module';
+import { BlockedUserInteractionGuard } from './common/guards/blocked-user-interaction.guard';
 
 @Module({
   imports: [
