@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import config from '../config';
-import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { BlockedUserInteractionGuard } from './common/guards/blocked-user-interaction.guard';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -11,6 +10,7 @@ import { CommentModule } from './modules/comment/comment.module';
 import { ReplyModule } from './modules/reply/reply.module';
 import { BlockModule } from './modules/block/block.module';
 import { AppGateway } from './app.gateway';
+import { DatabaseModule } from './modules/database/database.module';
 
 @Module({
   imports: [

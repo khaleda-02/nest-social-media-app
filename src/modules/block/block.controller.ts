@@ -7,12 +7,14 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Logger,
 } from '@nestjs/common';
 import { BlockService } from './block.service';
 import { User } from 'src/common/decorators/user.decorator';
 
 @Controller('')
 export class BlockController {
+  private logger = new Logger(BlockController.name);
   constructor(private readonly blockService: BlockService) {}
 
   @Get('block/:userId')
@@ -20,6 +22,9 @@ export class BlockController {
     @Param('userId', ParseIntPipe) blockedUserId: number,
     @User() user
   ) {
+    this.logger.log(
+      `user from params (blockedUserId: ${blockedUserId}) , user from token(blocker) : ${user.id}`
+    );
     return this.blockService.createBlock(user.id, blockedUserId);
   }
 

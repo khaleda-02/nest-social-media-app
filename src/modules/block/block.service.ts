@@ -60,6 +60,10 @@ export class BlockService {
       where: { blockerUserId, blockedUserId },
     });
 
+    this.logger.debug(
+      `blockExists: ${blockExists} , with blockedUserId: ${blockedUserId} , blockerUserId: ${blockerUserId}`
+    );
+
     this.logger.log(
       blockExists
         ? `user with id : ${blockerUserId} , blocking user with id: ${blockedUserId}`

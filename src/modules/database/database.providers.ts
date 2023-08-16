@@ -1,6 +1,6 @@
-import { SEQUELIZE } from '../common/contants';
 import { ConfigService } from '@nestjs/config';
 import { Sequelize } from 'sequelize-typescript';
+import { SEQUELIZE } from 'src/common/contants';
 import { Block } from 'src/modules/block/entities/block.entity';
 import { Comment } from 'src/modules/comment/entities/comment.entity';
 import { Post } from 'src/modules/post/entities/post.entity';

@@ -8,4 +8,5 @@ export const BLOCK_REPOSITORY = 'BLOCK_REPOSITORY';
 export const REPLY_REPOSITORY = 'REPLY_REPOSITORY ';
 export const POST_REPOSITORY = 'POST_REPOSITORY';
 export const IS_PUBLIC_KEY = 'isPublic';
+export const IS_BLOCKED_KEY = 'isBlocked';
 export const ROLES_KEY = 'roles';
