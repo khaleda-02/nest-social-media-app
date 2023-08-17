@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Inject,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -11,25 +12,28 @@ import { User } from '../user/entities/user.entity';
 import { Transaction } from 'sequelize';
 import { POST_REPOSITORY } from 'src/common/contants';
 import { UserService } from '../user/user.service';
+import * as moment from 'moment';
+import { Op } from 'sequelize';
+import { CommentService } from '../comment/comment.service';
 
 @Injectable()
 export class PostService {
+  private logger = new Logger(PostService.name);
   constructor(
     @Inject(POST_REPOSITORY)
     private postRepository: typeof Post,
-    private userService: UserService
+    private userService: UserService,
+    private commentService: CommentService
   ) {}
 
   async create(
     createPostDto: CreatePostDto,
     { username }: User
   ): Promise<Post> {
-    //! getting the user using findOne rather than getting the usr from the User decorator ,
-    //! because the user from the decorator comes from the token (the data does not change when incrementing)
-    //? when getting the user from the decorator and then incrementing the postCreatiedToday , it increments it in db but not update the data in the token
     const user = await this.userService.findOne(username);
 
-    if (!this.userService.canCreate(user))
+    const canCreate = await this.canCreate(user.id);
+    if (!canCreate)
       throw new BadRequestException('you exceeded the maximum number of posts');
 
     const post = await this.postRepository.create({
@@ -37,7 +41,6 @@ export class PostService {
       userId: user.id,
     });
 
-    await this.userService.incrementPostCreated(user);
     return post;
   }
 
@@ -76,14 +79,23 @@ export class PostService {
   }
 
   async remove(id: number, userId: number) {
-    const effectedRows = await this.postRepository.destroy({
-      where: { id, userId, numOfWatchers: 0 },
+    const post = await this.postRepository.findOne({
+      where: { id, userId },
     });
-    if (!effectedRows)
-      throw new BadRequestException(
-        "not found post , or this post not belong to this user , or can't be deleted"
+
+    if (!post) {
+      throw new NotFoundException(
+        'Post not found or does not belong to the user.'
       );
-    return `succeflly deleted ${id} post`;
+    }
+
+    if (post.numOfWatchers > 0) {
+      throw new BadRequestException('Cannot delete a post with watchers.');
+    }
+
+    await post.destroy();
+    await this.commentService.delete(id);
+    return `Successfully deleted post with ID ${id}.`;
   }
 
   //! Helper Methods
@@ -106,5 +118,18 @@ export class PostService {
     post.numOfWatchers += 1;
     await post.save();
     return post;
+  }
+
+  async canCreate(id: number): Promise<boolean> {
+    const createdPostForToday = await this.postRepository.count({
+      where: {
+        userId: id,
+        createdAt: {
+          [Op.gte]: moment.utc().startOf('day').local().toISOString(),
+        },
+      },
+    });
+    this.logger.log(`createdPostForToday ${createdPostForToday}`);
+    return createdPostForToday < 5;
   }
 }

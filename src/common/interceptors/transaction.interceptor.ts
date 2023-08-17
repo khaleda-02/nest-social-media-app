@@ -14,9 +14,7 @@ import { Transaction, Sequelize } from 'sequelize';
 export class TransactionInterceptor implements NestInterceptor {
   private logger = new Logger(TransactionInterceptor.name);
 
-  constructor(
-    @Inject(SEQUELIZE) private sequelize: Sequelize // private sequelize: Sequelize
-  ) {}
+  constructor(@Inject(SEQUELIZE) private sequelize: Sequelize) {}
 
   async intercept(
     context: ExecutionContext,

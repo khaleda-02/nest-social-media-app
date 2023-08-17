@@ -8,21 +8,23 @@ import {
 } from '@nestjs/common';
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { ReplyService } from './reply.service';
-import { BlockedUserInteractionInterceptor } from 'src/common/interceptors/blocked-user-interaction.interceptor';
-import { User } from 'src/common/decorators/user.decorator';
+import { UserIdentity } from 'src/common/decorators/user.decorator';
 import { ParentType } from 'src/common/enums/reply-parent.enum';
+import { BlockedChecking } from 'src/common/decorators/block.decorator';
+import { TransactionInterceptor } from 'src/common/interceptors/transaction.interceptor';
 
+@UseInterceptors(TransactionInterceptor)
 @Controller('replies')
 export class ReplyController {
   constructor(private readonly replyService: ReplyService) {}
 
-  @UseInterceptors(BlockedUserInteractionInterceptor)
+  @BlockedChecking()
   @Post('posts/:postId/comments/:commentId')
   createReplyToComment(
     @Body() createReplyDto: CreateReplyDto,
     @Param('commentId', ParseIntPipe) commentId: number,
     @Param('postId', ParseIntPipe) postId: number,
-    @User() user
+    @UserIdentity() user
   ) {
     return this.replyService.create(
       createReplyDto,
@@ -31,13 +33,14 @@ export class ReplyController {
       ParentType.COMMENT
     );
   }
-  @UseInterceptors(BlockedUserInteractionInterceptor)
+
+  @BlockedChecking()
   @Post('/:replyId/posts/:postId')
   createReplyToReply(
     @Body() createReplyDto: CreateReplyDto,
     @Param('replyId', ParseIntPipe) replyId: number,
     @Param('postId', ParseIntPipe) postId: number,
-    @User() user
+    @UserIdentity() user
   ) {
     return this.replyService.create(
       createReplyDto,

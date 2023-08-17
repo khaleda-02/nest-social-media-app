@@ -15,12 +15,12 @@ export class BlockedUserInteractionGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isBlocked = this.reflector.getAllAndOverride<boolean>(
+    const isBlockedCheckingNeeded = this.reflector.getAllAndOverride<boolean>(
       IS_BLOCKED_KEY,
       [context.getClass(), context.getHandler()]
     );
 
-    if (!isBlocked) return true;
+    if (!isBlockedCheckingNeeded) return true;
 
     const request = context.switchToHttp().getRequest();
     // getting userId form the request

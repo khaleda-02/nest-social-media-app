@@ -8,10 +8,13 @@ import {
   Delete,
   ParseIntPipe,
   Logger,
+  UseInterceptors,
 } from '@nestjs/common';
 import { BlockService } from './block.service';
-import { User } from 'src/common/decorators/user.decorator';
+import { UserIdentity } from 'src/common/decorators/user.decorator';
+import { TransactionInterceptor } from 'src/common/interceptors/transaction.interceptor';
 
+@UseInterceptors(TransactionInterceptor)
 @Controller('')
 export class BlockController {
   private logger = new Logger(BlockController.name);
@@ -20,7 +23,7 @@ export class BlockController {
   @Get('block/:userId')
   createBlock(
     @Param('userId', ParseIntPipe) blockedUserId: number,
-    @User() user
+    @UserIdentity() user
   ) {
     this.logger.log(
       `user from params (blockedUserId: ${blockedUserId}) , user from token(blocker) : ${user.id}`
@@ -29,7 +32,10 @@ export class BlockController {
   }
 
   @Get('unblock/:userId')
-  unblock(@Param('userId', ParseIntPipe) blockedUserId: number, @User() user) {
+  unblock(
+    @Param('userId', ParseIntPipe) blockedUserId: number,
+    @UserIdentity() user
+  ) {
     return this.blockService.unblock(user.id, blockedUserId);
   }
 }

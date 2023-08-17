@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { Comment } from './entities/comment.entity';
@@ -7,6 +12,7 @@ import { PostService } from '../post/post.service';
 
 @Injectable()
 export class CommentService {
+  private logger = new Logger(CommentService.name);
   constructor(
     @Inject(COMMENT_REPOSITORY)
     private commentRepository: typeof Comment,
@@ -26,5 +32,15 @@ export class CommentService {
     });
 
     return comment.get({ plain: true });
+  }
+
+  async delete(PostId: number) {
+    const deletedComment = await this.commentRepository.destroy({
+      where: { PostId },
+    });
+
+    deletedComment
+      ? this.logger.log(`comments deleted for post ${PostId}`)
+      : new BadRequestException();
   }
 }
