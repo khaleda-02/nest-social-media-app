@@ -1,5 +1,5 @@
 import { REPLY_REPOSITORY } from 'src/common/contants';
-import { Reply } from './entities/reply.entity';
+import { Reply } from './models/reply.model';
 
 export const replyProviders = [
   {

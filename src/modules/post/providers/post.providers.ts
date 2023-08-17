@@ -1,6 +1,6 @@
 import { POST_REPOSITORY } from 'src/common/contants';
-import { Post } from './entities/post.entity';
 import moment from 'moment';
+import { Post } from '../models';
 
 export const postProviders = [
   {

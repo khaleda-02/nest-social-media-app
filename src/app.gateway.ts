@@ -6,7 +6,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
-import { PostService } from './modules/post/post.service';
+import { PostService } from './modules/post/services';
 
 @WebSocketGateway()
 export class AppGateway implements OnModuleInit {

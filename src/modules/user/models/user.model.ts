@@ -8,9 +8,9 @@ import {
   Model,
   AutoIncrement,
 } from 'sequelize-typescript';
-import { Block } from '../../block/entities/block.entity';
-import { Post } from '../../post/entities/post.entity';
-import { Comment } from '../../comment/entities/comment.entity';
+import { Block } from '../../block/models/block.model';
+import { Post } from '../../post/models/post.model';
+import { Comment } from 'src/modules/post/models';
 
 const { DATE, NUMBER, STRING } = DataType;
 

@@ -8,8 +8,8 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import { User } from '../../user/entities/user.entity';
-import { Post } from '../../post/entities/post.entity';
+import { User } from '../../user/models/user.model';
+import { Post } from './post.model';
 
 const { STRING, NUMBER, DATE } = DataTypes;
 

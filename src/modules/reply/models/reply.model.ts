@@ -8,7 +8,7 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import { User } from '../../user/entities/user.entity';
+import { User } from '../../user/models/user.model';
 import { ParentType } from 'src/common/enums/reply-parent.enum';
 
 const { STRING, NUMBER, DATE, ENUM } = DataTypes;

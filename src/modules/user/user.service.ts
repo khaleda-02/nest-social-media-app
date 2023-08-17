@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './entities/user.entity';
+import { User } from './models/user.model';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { USER_REPOSITORY } from 'src/common/contants';
 

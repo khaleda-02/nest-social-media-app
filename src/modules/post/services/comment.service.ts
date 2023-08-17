@@ -3,12 +3,12 @@ import {
   Inject,
   Injectable,
   Logger,
+  forwardRef,
 } from '@nestjs/common';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
-import { Comment } from './entities/comment.entity';
 import { COMMENT_REPOSITORY } from 'src/common/contants';
-import { PostService } from '../post/post.service';
+import { PostService } from './post.service';
+import { CreateCommentDto } from '../dto';
+import { Comment } from '../models';
 
 @Injectable()
 export class CommentService {
@@ -16,6 +16,8 @@ export class CommentService {
   constructor(
     @Inject(COMMENT_REPOSITORY)
     private commentRepository: typeof Comment,
+
+    @Inject(forwardRef(() => PostService))
     private postService: PostService
   ) {}
 
@@ -34,13 +36,13 @@ export class CommentService {
     return comment.get({ plain: true });
   }
 
-  async delete(PostId: number) {
+  async delete(postId: number) {
     const deletedComment = await this.commentRepository.destroy({
-      where: { PostId },
+      where: { postId },
     });
 
     deletedComment
-      ? this.logger.log(`comments deleted for post ${PostId}`)
+      ? this.logger.log(`comments deleted for post ${postId}`)
       : new BadRequestException();
   }
 }

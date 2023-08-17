@@ -2,8 +2,8 @@ import { CanActivate, ExecutionContext, Inject, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { BlockService } from 'src/modules/block/block.service';
-import { PostService } from 'src/modules/post/post.service';
 import { IS_BLOCKED_KEY } from '../contants';
+import { PostService } from 'src/modules/post/services';
 
 export class BlockedUserInteractionGuard implements CanActivate {
   private logger = new Logger(BlockedUserInteractionGuard.name);

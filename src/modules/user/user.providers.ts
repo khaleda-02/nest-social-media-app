@@ -1,5 +1,5 @@
 import { USER_REPOSITORY } from 'src/common/contants';
-import { User } from './entities/user.entity';
+import { User } from './models/user.model';
 
 export const userProviders = [
   {

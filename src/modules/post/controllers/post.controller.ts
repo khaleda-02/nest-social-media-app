@@ -3,19 +3,17 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Put,
   UseInterceptors,
 } from '@nestjs/common';
-import { PostService } from './post.service';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
 import { TransactionInterceptor } from 'src/common/interceptors/transaction.interceptor';
 import { TransactionDecorator } from 'src/common/decorators/transaction.decorator';
 import { Transaction } from 'sequelize';
 import { UserIdentity } from 'src/common/decorators/user.decorator';
+import { PostService } from '../services';
+import { CreatePostDto, UpdatePostDto } from '../dto';
 
 @UseInterceptors(TransactionInterceptor)
 @Controller('posts')

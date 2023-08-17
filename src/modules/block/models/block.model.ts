@@ -8,7 +8,7 @@ import {
   BelongsTo,
   ForeignKey,
 } from 'sequelize-typescript';
-import { User } from 'src/modules/user/entities/user.entity';
+import { User } from 'src/modules/user/models/user.model';
 
 const { NUMBER, DATE } = DataType;
 @Table({ tableName: 'Blocks', paranoid: true, underscored: true })

@@ -9,8 +9,8 @@ import {
   ForeignKey,
   HasMany,
 } from 'sequelize-typescript';
-import { Comment } from 'src/modules/comment/entities/comment.entity';
-import { User } from 'src/modules/user/entities/user.entity';
+import { User } from 'src/modules/user/models/user.model';
+import { Comment } from './comment.model';
 
 const { STRING, NUMBER, DATE, BOOLEAN } = DataType;
 @Table({ tableName: 'Posts', paranoid: true, underscored: true })

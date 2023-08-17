@@ -5,7 +5,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { BLOCK_REPOSITORY } from 'src/common/contants';
-import { Block } from './entities/block.entity';
+import { Block } from './models/block.model';
 
 @Injectable()
 export class BlockService {

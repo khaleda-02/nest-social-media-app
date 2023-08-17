@@ -5,23 +5,22 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { Post } from './entities/post.entity';
-import { User } from '../user/entities/user.entity';
 import { Transaction } from 'sequelize';
 import { POST_REPOSITORY } from 'src/common/contants';
-import { UserService } from '../user/user.service';
-import * as moment from 'moment';
 import { Op } from 'sequelize';
-import { CommentService } from '../comment/comment.service';
+import { UserService } from 'src/modules/user/user.service';
+import { CommentService } from './comment.service';
+import { CreatePostDto, UpdatePostDto } from '../dto';
+import { User } from 'src/modules/user/models/user.model';
+import { Post } from '../models';
+import * as moment from 'moment';
 
 @Injectable()
 export class PostService {
   private logger = new Logger(PostService.name);
   constructor(
     @Inject(POST_REPOSITORY)
-    private postRepository: typeof Post,
+    private postRepository,
     private userService: UserService,
     private commentService: CommentService
   ) {}
@@ -66,15 +65,20 @@ export class PostService {
     userId: number,
     transaction: Transaction
   ) {
-    const [_, effectedRows] = await this.postRepository.update(
-      { ...updatePostDto, isEdited: true },
-      { where: { userId, id }, returning: true, transaction }
-    );
+    const post = await this.postRepository.findOne({
+      where: { userId, id },
+    });
 
-    if (!effectedRows)
+    if (!post)
       throw new BadRequestException(
         'not found post , or this post not belong to this user '
       );
+
+    await post.update(
+      { ...updatePostDto, isEdited: true, updatedAt: new Date() },
+      { transaction }
+    );
+
     return `succeflly updated ${id} post`;
   }
 

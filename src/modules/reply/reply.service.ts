@@ -1,10 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { CreateReplyDto } from './dto/create-reply.dto';
 import { REPLY_REPOSITORY } from 'src/common/contants';
 import { ParentType } from 'src/common/enums/reply-parent.enum';
 
 @Injectable()
 export class ReplyService {
+  private logger = new Logger(ReplyService.name);
   constructor(
     @Inject(REPLY_REPOSITORY)
     private replyRepository
@@ -22,5 +28,15 @@ export class ReplyService {
       parentId,
       parentType,
     });
+  }
+
+  async delete(postId: number) {
+    const deletedReplies = await this.replyRepository.destroy({
+      // where: { parentType :  },
+    });
+
+    deletedReplies
+      ? this.logger.log(`comments deleted for post ${postId}`)
+      : new BadRequestException();
   }
 }
