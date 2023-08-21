@@ -6,6 +6,8 @@ import { JwtService } from '@nestjs/jwt';
 import { BlockService } from './modules/block/block.service';
 import { BlockedUserInteractionGuard } from './common/guards/blocked-user-interaction.guard';
 import { PostService } from './modules/post/services';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { CommonService } from './common.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,13 +22,19 @@ async function bootstrap() {
   /// guard
   const reflector = app.get(Reflector);
   const jwtService = app.get(JwtService);
-  const postService = app.get(PostService);
-  const blockService = app.get(BlockService);
+  const commonService = app.get(CommonService);
 
   app.useGlobalGuards(
     new AuthGuard(reflector, jwtService),
-    new BlockedUserInteractionGuard(reflector, postService, blockService)
+    new BlockedUserInteractionGuard(
+      reflector,
+      commonService.getPostService(),
+      commonService.getBlockService()
+    )
   );
+
+  // standardrize 
+  app.useGlobalInterceptors(new TransformInterceptor());
   await app.listen(3000);
 }
 bootstrap();

@@ -10,6 +10,7 @@ import { ReplyModule } from './modules/reply/reply.module';
 import { BlockModule } from './modules/block/block.module';
 import { AppGateway } from './app.gateway';
 import { DatabaseModule } from './modules/database/database.module';
+import { CommonService } from './common.service';
 
 @Module({
   imports: [
@@ -22,6 +23,6 @@ import { DatabaseModule } from './modules/database/database.module';
     ReplyModule,
     BlockModule,
   ],
-  providers: [AppGateway],
+  providers: [AppGateway, CommonService],
 })
 export class AppModule {}

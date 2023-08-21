@@ -9,6 +9,7 @@ import { COMMENT_REPOSITORY } from 'src/common/contants';
 import { PostService } from './post.service';
 import { CreateCommentDto } from '../dto';
 import { Comment } from '../models';
+import { Transaction } from 'sequelize';
 
 @Injectable()
 export class CommentService {
@@ -36,9 +37,10 @@ export class CommentService {
     return comment.get({ plain: true });
   }
 
-  async delete(postId: number) {
+  async delete(postId: number, transaction: Transaction) {
     const deletedComment = await this.commentRepository.destroy({
       where: { postId },
+      transaction,
     });
 
     deletedComment

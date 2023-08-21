@@ -27,7 +27,8 @@ export class PostService {
 
   async create(
     createPostDto: CreatePostDto,
-    { username }: User
+    { username }: User,
+    transaction: Transaction
   ): Promise<Post> {
     const user = await this.userService.findOne(username);
 
@@ -35,22 +36,25 @@ export class PostService {
     if (!canCreate)
       throw new BadRequestException('you exceeded the maximum number of posts');
 
-    const post = await this.postRepository.create({
-      ...createPostDto,
-      userId: user.id,
-    });
+    const post = await this.postRepository.create(
+      {
+        ...createPostDto,
+        userId: user.id,
+      },
+      { transaction }
+    );
 
     return post;
   }
 
-  async findAll(userId: number) {
-    const lastestPosts = await this.postRepository.findAll({
-      limit: 500,
+  async findAll(userId: number, pageNum: number, limit: number) {
+    const offset = (pageNum - 1) * limit;
+    return await this.postRepository.findAll({
+      limit,
+      offset,
       order: [['createdAt', 'DESC']],
-      raw: true,
+      // raw: true,
     });
-    const shuffledArray = this.shuffleArray(lastestPosts);
-    return shuffledArray.slice(0, 100);
   }
 
   async findOne(id: number): Promise<Post | undefined> {
@@ -82,7 +86,7 @@ export class PostService {
     return `succeflly updated ${id} post`;
   }
 
-  async remove(id: number, userId: number) {
+  async remove(id: number, userId: number, transaction: Transaction) {
     const post = await this.postRepository.findOne({
       where: { id, userId },
     });
@@ -97,8 +101,8 @@ export class PostService {
       throw new BadRequestException('Cannot delete a post with watchers.');
     }
 
-    await post.destroy();
-    await this.commentService.delete(id);
+    await post.destroy({ transaction });
+    await this.commentService.delete(id, transaction);
     return `Successfully deleted post with ID ${id}.`;
   }
 
